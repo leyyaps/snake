@@ -27,7 +27,7 @@ function randomFoodGenerator(){
   $('#cell_'+r1+'_'+c1).addClass('food');
      food=''+r1+'_'+c1;
 };
-// randomFoodGenerator();
+randomFoodGenerator();
 // console.log(food);
 
 //  Snake isn't really moving(ha! I know - obvious but just to remind myself) its having its tail chopped of and then head extended to give the appearance of movement.Snake can therefore be represented by using an array. We then can push and pop the cells from that array to make it move and stick an extra cell on when it eats
@@ -39,17 +39,34 @@ var tail=snake.pop();
 
 //Adding to head using push. 
 // Change to using unshift as push puts it on end so wont look like moving
-var head=snake.unshift();
-  $('#cell_'+head).addClass('snake-cell');
+// var head=snake.unshift();
+//   $('#cell_'+head).addClass('snake-cell');
+// Doesnt know where to put it.
+// Need to know the direction but to know that I need to know what key is pressed first
+
+
+// Setup the keyboard 
+// $(document).keydown(function(e) {
+//     console.log(e.keyCode);
+// });
+// I need LEFT = 37  UP = 38  RIGHT =39 DOWN= 40. Possibly space bar to start? = 32
+$(document).keydown(function(e) {
+   if (e.keyCode === 37) {
+    var direction = left;
+   } else if (e.keyCode === 38) {
+    var direction = up;
+   } else if (e.keyCode === 39) {
+    var direction = right;
+   } else if (e.keyCode === 40) {
+    var direction = down;
+   }
+});
 
 
 
 
 
-
-
-
-
+  
 
 
 }); 
