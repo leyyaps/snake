@@ -3,22 +3,26 @@
   width: 600px;
   height: 400px;
   border: solid 2px black;
+  padding: 0px;
+  margin: 0px;
 
 }
 
-#snake-cell {
+.screen-cell {
 
   width: 20px;
   height: 20px;
   float: left;
-  background: #000000;
+  background: #9FD4B4;
+}
+.snake-cell {
+  background: black;
 }
 
-#food {
+.food {
 
   background:red;
-  width:20px;
-  height:20px;
+  
 
 
 }
