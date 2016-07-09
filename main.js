@@ -3,8 +3,11 @@ $(function(){
 var snake=["1_8","2_8","3_8","4_8"]; //intial snake array
 var direction = "down"; // direction starts down
 var food=""; // no food till randomFoodGenerator
-var speed = 200;
+var speed = 150;
 var timerId;
+var bleep = new Audio("audio/bleep.wav");
+var lose = new Audio('audio/lose.wav');
+var score = 0;
 // Creating the cells in the board
 // Board is 600 x 400 so can take 30 cells wide and 20 blocks tall. They are snake-cells.
 // Need to append the game-box with screen cells. 
@@ -14,6 +17,7 @@ function startGame() {
   direction = "down";
   snake = ["1_8","2_8","3_8","4_8"];
   food="";
+
 
   console.log("startGame");
  
@@ -32,8 +36,12 @@ function startGame() {
       // randomFoodGenerator();
       timerId = setInterval(snakeMove, speed);
 }
+$('#go').click(function() {
+  startGame();
+  randomFoodGenerator();
+  $(this).text('Play Again')
+});
 
-startGame();
 // Create a random food generator so snakey has something to eat
 function randomFoodGenerator(){
   var r1 = Math.floor(Math.random() * 19);
@@ -41,8 +49,12 @@ function randomFoodGenerator(){
   $('#cell_'+r1+'_'+c1).addClass('food');
      food=''+r1+'_'+c1;
 };
-randomFoodGenerator();
+
 // console.log(food);
+// scoreIncrease function
+// function scoreIncrease(){
+  
+// }
 
 function snakeMove() {
 
@@ -77,15 +89,22 @@ function snakeMove() {
       snake.push(tail);
       $('#cell_'+tail).addClass('snake-cell');
       $('#cell_'+food).removeClass('food'); //and remove the food so it's eaten
+      
+      score++;
+      bleep.play();
       randomFoodGenerator();
+      $('#score').html(score*10);
+      
+
   }
 
   snake.unshift(eat);
 
   $('#cell_'+eat).addClass('snake-cell'); 
     //how to die
-  if (c<0 || r<0 || c>29 || r>19 ){
+  if (c<0 || r<0 || c>29 || r>19){
       console.log("Dead!");
+      lose.play();
       clearInterval(timerId); 
 
       // alert('You lost !');    
@@ -96,7 +115,7 @@ function snakeMove() {
     // setTimeout(function(){snakeMove()}, speed);
 
 }
-
+// Key press function
   $(document).keydown(function(e){
       if (e.keyCode === 37) { 
          direction="left";
