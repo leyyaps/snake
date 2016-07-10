@@ -93,7 +93,7 @@ function snakeMove() {
       score++;
       bleep.play();
       randomFoodGenerator();
-      $('#score').html(score*10);
+      $('#score').html("Score: "+(score*10));
       
 
   }
@@ -102,8 +102,9 @@ function snakeMove() {
 
   $('#cell_'+eat).addClass('snake-cell'); 
     //how to die
-  if (c<0 || r<0 || c>29 || r>19){
+  if (c<0 || r<0 || c>29 || r>19 || ('#cell_'+eat).isClass('snake-cell')){
       console.log("Dead!");
+      $('#message').html("You are dead!");
       lose.play();
       clearInterval(timerId); 
 
