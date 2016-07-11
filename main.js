@@ -59,9 +59,6 @@ function randomFoodGenerator(){
 function snakeMove() {
 
 
-
-
-
   // Removing the tail of the snake
   var tail=snake.pop(); 
   $('#cell_'+tail).removeClass('snake-cell');
@@ -90,19 +87,23 @@ function snakeMove() {
       $('#cell_'+tail).addClass('snake-cell');
       $('#cell_'+food).removeClass('food'); //and remove the food so it's eaten
       
+     //sPEED UP IF STATEMENT?
+      // if (snake.length > 6){
+      //   speed = 100;
+      // }
       score++;
       bleep.play();
       randomFoodGenerator();
       $('#score').html("Score: "+(score*10));
       
-
   }
 
   snake.unshift(eat);
 
   $('#cell_'+eat).addClass('snake-cell'); 
-    //how to die
-  if (c<0 || r<0 || c>29 || r>19 || ('#cell_'+eat).isClass('snake-cell')){
+    //how to die // Trying to add extra eating-self conditoon 
+    //|| ('#cell_'+eat).isClass('snake-cell')
+  if (c<0 || r<0 || c>29 || r>19){
       console.log("Dead!");
       $('#message').html("You are dead!");
       lose.play();
