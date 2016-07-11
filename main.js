@@ -22,38 +22,51 @@ var score = 0;
 // Let r = row and c=column. Then a number to correspond to where it is - e.g. r_10. -->  cell_row_column
 
 function startGame() {
-//  Snake isn't really moving(ha! I know - obvious but just to remind myself) its having its tail chopped of and then head extended to give the appearance of movement.Snake can therefore be represented by using an array. We then can push and pop the cells from that array to make it move and stick an extra cell on when it eats
-  direction = "down";
-  snake = ["1_8","2_8","3_8","4_8"];
-  food="";
+//  Snake isn't really moving of course- its having its tail chopped off and then head extended to give the appearance of movement.Snake can therefore be represented by using an array. We then can push and pop the cells from that array to make it move and stick an extra cell on when it eats
+  direction = "down"; // inital direction
+  snake = ["1_8","2_8","3_8","4_8"]; // initial array of snake
+  food=""; // food not made yet
  
+  score = 0;
+  speed = 150;
+  $('#score').html("Score: "+(score));
 
   console.log("startGame");
  
   $('#game-box').html(""); // Get the box 
  //Create the cells within the game-box that later become snake cells as the snake grows 
-    for (var r = 0; r < 20; r++) {
-      for (var c = 0; c < 30; c++) {
-        $('#game-box').append('<div class=screen-cell id=cell_'+r+'_'+c+'></div>');
-      }
+  for (var r = 0; r < 20; r++) {
+    for (var c = 0; c < 30; c++) {
+      $('#game-box').append('<div class=screen-cell id=cell_'+r+'_'+c+'></div>');
     }
-      // Create a snake to start off with
-      $('#cell_1_8').addClass('snake-cell');
-      $('#cell_2_8').addClass('snake-cell');
-      $('#cell_3_8').addClass('snake-cell');
-      $('#cell_4_8').addClass('snake-cell');
-      // randomFoodGenerator();
-      timerId = setInterval(snakeMove, speed);
+  }
+  // Create a snake in the game-box to start off with
+  $('#cell_1_8').addClass('snake-cell');
+  $('#cell_2_8').addClass('snake-cell');
+  $('#cell_3_8').addClass('snake-cell');
+  $('#cell_4_8').addClass('snake-cell');
+  // randomFoodGenerator();
+  timerId = setTimeout(snakeMove, speed);
+
 }
-$('#go').click(function() {
-  score = 0;
-  
-  $('#score').html("Score: "+(score));
+
+
+
+$('#go').click(function () {
+ 
   startGame();
   randomFoodGenerator();
   $(this).text('Play Again')
 
 });
+
+document.body.keydown = function(e){
+    if(e.keyCode == 32){
+        startGame();
+        randomFoodGenerator();
+        // $(this).text('Play Again')
+    }
+}
 
 // Create a random food generator so snakey has something to eat
 function randomFoodGenerator(){
@@ -62,6 +75,7 @@ function randomFoodGenerator(){
    
   $('#cell_'+r1+'_'+c1).addClass('food');
   food = '' + r1 + '_' + c1;
+  speed-=3; 
 };
 
 
@@ -92,13 +106,13 @@ function snakeMove() {
     }  
   var eat = r + "_" + c;
   // So now if the eat cell is equal to the food square we know to add to the snake tail .
-  if (eat===food){
+  if (eat===food) {
       snake.push(tail);
       $('#cell_'+tail).addClass('snake-cell');
       $('#cell_'+food).removeClass('food'); //and remove the food so it's eaten
      
      // increase the speed by 2 each time snakey eats
-      speed-=5;
+      
 
       console.log(speed);
       score++; // increment the score
@@ -109,15 +123,17 @@ function snakeMove() {
   }
 
   snake.unshift(eat);
+
   
   // function checkForCollisions() {
 
-  if(($('#cell_'+eat).hasClass('snake-cell')) && (snake.length>5)) {
+  if(($('#cell_'+eat).hasClass('snake-cell')) && (snake.length>4)) {
     console.log("You've eaten yourself");
     $('#message').html("You are dead!"); //
    
     lose.play();
-    clearInterval(timerId); 
+    // clearInterval(timerId);
+    return;
 
   } 
 // }
@@ -129,30 +145,32 @@ function snakeMove() {
       $('#message').html("You are dead!");
 
       lose.play();
-      clearInterval(timerId); 
+      // clearInterval(timerId); 
 
-      // alert('You lost !');    
-      // startGame();
+ 
       return;
     }  
-    $('#cell_'+eat).addClass('snake-cell');       
+    $('#cell_'+eat).addClass('snake-cell');  
+
     // setTimeout(function(){snakeMove()}, speed);
-  
+  setTimeout(snakeMove, speed);
 }
 
 
 
 // Key press function
   $(document).keydown(function(e){
-      if (e.keyCode === 37) { 
-         direction="left";
-      }else if (e.keyCode === 38) { 
-         direction="up";
-      }else if (e.keyCode === 39) { 
-         direction="right";
-      }else if (e.keyCode === 40) { 
-         direction="down";
-    }
+    if (e.keyCode === 37) { 
+      direction="left";
+    } else if (e.keyCode === 38) { 
+      e.preventDefault();
+      direction="up";
+    } else if (e.keyCode === 39) { 
+      direction="right";
+    } else if (e.keyCode === 40) { 
+      e.preventDefault();
+      direction="down";
+    } 
   });
 
 
