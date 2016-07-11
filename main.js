@@ -57,6 +57,7 @@ $('#go').click(function () {
   startGame();
   randomFoodGenerator();
   $(this).text('Play Again')
+  $('#message').html("");
 
 });
 
@@ -64,6 +65,7 @@ document.body.keydown = function(e){
     if(e.keyCode == 32){
         startGame();
         randomFoodGenerator();
+        $('#message').html("");
         // $(this).text('Play Again')
     }
 }
