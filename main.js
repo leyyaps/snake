@@ -8,16 +8,25 @@ var timerId;
 var bleep = new Audio("audio/bleep.wav");
 var lose = new Audio('audio/lose.wav');
 var score = 0;
+
+
+// function timer {
+
+//   timestart = new Date.now;
+
+// }
+
 // Creating the cells in the board
 // Board is 600 x 400 so can take 30 cells wide and 20 blocks tall. They are snake-cells.
 // Need to append the game-box with screen cells. 
 // Let r = row and c=column. Then a number to correspond to where it is - e.g. r_10. -->  cell_row_column
+
 function startGame() {
 //  Snake isn't really moving(ha! I know - obvious but just to remind myself) its having its tail chopped of and then head extended to give the appearance of movement.Snake can therefore be represented by using an array. We then can push and pop the cells from that array to make it move and stick an extra cell on when it eats
   direction = "down";
   snake = ["1_8","2_8","3_8","4_8"];
   food="";
-
+ 
 
   console.log("startGame");
  
@@ -37,24 +46,25 @@ function startGame() {
       timerId = setInterval(snakeMove, speed);
 }
 $('#go').click(function() {
+  score = 0;
+  
+  $('#score').html("Score: "+(score));
   startGame();
   randomFoodGenerator();
   $(this).text('Play Again')
+
 });
 
 // Create a random food generator so snakey has something to eat
 function randomFoodGenerator(){
   var r1 = Math.floor(Math.random() * 19);
   var c1 = Math.floor(Math.random() * 29);
+   
   $('#cell_'+r1+'_'+c1).addClass('food');
-     food=''+r1+'_'+c1;
+  food = '' + r1 + '_' + c1;
 };
 
-// console.log(food);
-// scoreIncrease function
-// function scoreIncrease(){
-  
-// }
+
 
 function snakeMove() {
 
@@ -86,26 +96,38 @@ function snakeMove() {
       snake.push(tail);
       $('#cell_'+tail).addClass('snake-cell');
       $('#cell_'+food).removeClass('food'); //and remove the food so it's eaten
-      
-     //sPEED UP IF STATEMENT?
-      // if (snake.length > 6){
-      //   speed = 100;
-      // }
-      score++;
+     
+     // increase the speed by 2 each time snakey eats
+      speed-=5;
+
+      console.log(speed);
+      score++; // increment the score
       bleep.play();
       randomFoodGenerator();
       $('#score').html("Score: "+(score*10));
-      
+      // timeEnd = new Date($.now());
   }
 
   snake.unshift(eat);
+  
+  // function checkForCollisions() {
 
+  if(($('#cell_'+eat).hasClass('snake-cell')) && (snake.length>5)) {
+    console.log("You've eaten yourself");
+    $('#message').html("You are dead!"); //
+   
+    lose.play();
+    clearInterval(timerId); 
+
+  } 
+// }
   $('#cell_'+eat).addClass('snake-cell'); 
     //how to die // Trying to add extra eating-self conditoon 
     //|| ('#cell_'+eat).isClass('snake-cell')
   if (c<0 || r<0 || c>29 || r>19){
       console.log("Dead!");
       $('#message').html("You are dead!");
+
       lose.play();
       clearInterval(timerId); 
 
@@ -115,8 +137,11 @@ function snakeMove() {
     }  
     $('#cell_'+eat).addClass('snake-cell');       
     // setTimeout(function(){snakeMove()}, speed);
-
+  
 }
+
+
+
 // Key press function
   $(document).keydown(function(e){
       if (e.keyCode === 37) { 
