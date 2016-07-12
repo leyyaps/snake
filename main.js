@@ -9,13 +9,6 @@ var bleep = new Audio("audio/bleep.wav");
 var lose = new Audio('audio/lose.wav');
 var score = 0;
 
-
-// function timer {
-
-//   timestart = new Date.now;
-
-// }
-
 // Creating the cells in the board
 // Board is 600 x 400 so can take 30 cells wide and 20 blocks tall. They are snake-cells.
 // Need to append the game-box with screen cells. 
@@ -45,15 +38,11 @@ function startGame() {
   $('#cell_2_8').addClass('snake-cell');
   $('#cell_3_8').addClass('snake-cell');
   $('#cell_4_8').addClass('snake-cell');
-  // randomFoodGenerator();
   timerId = setTimeout(snakeMove, speed);
 
 }
 
-
-
 $('#go').click(function () {
- 
   startGame();
   randomFoodGenerator();
   $(this).text('Play Again')
@@ -66,7 +55,6 @@ document.body.keydown = function(e){
         startGame();
         randomFoodGenerator();
         $('#message').html("");
-        // $(this).text('Play Again')
     }
 }
 
@@ -74,17 +62,12 @@ document.body.keydown = function(e){
 function randomFoodGenerator(){
   var r1 = Math.floor(Math.random() * 19);
   var c1 = Math.floor(Math.random() * 29);
-   
   $('#cell_'+r1+'_'+c1).addClass('food');
   food = '' + r1 + '_' + c1;
   speed-=3; 
 };
 
-
-
 function snakeMove() {
-
-
   // Removing the tail of the snake
   var tail=snake.pop(); 
   $('#cell_'+tail).removeClass('snake-cell');
@@ -111,45 +94,33 @@ function snakeMove() {
   if (eat===food) {
       snake.push(tail);
       $('#cell_'+tail).addClass('snake-cell');
-      $('#cell_'+food).removeClass('food'); //and remove the food so it's eaten
-     
-     // increase the speed by 2 each time snakey eats
-      
-
-      console.log(speed);
+      $('#cell_'+food).removeClass('food'); //and remove the food so it's eaten  
+      // console.log(speed);
       score++; // increment the score
-      bleep.play();
+      bleep.play(); // add bleep on eat
       randomFoodGenerator();
-      $('#score').html("Score: "+(score*10));
-      // timeEnd = new Date($.now());
+      $('#score').html("Score: "+(score*10)); // update score div
+
   }
 
   snake.unshift(eat);
 
-  
-  // function checkForCollisions() {
-
   if(($('#cell_'+eat).hasClass('snake-cell')) && (snake.length>4)) {
-    console.log("You've eaten yourself");
-    $('#message').html("You are dead!"); //
+  console.log("You've eaten yourself");
+  $('#message').html("You are dead!"); //
    
-    lose.play();
-    // clearInterval(timerId);
-    return;
+  lose.play();
+  return;
 
   } 
-// }
+
   $('#cell_'+eat).addClass('snake-cell'); 
-    //how to die // Trying to add extra eating-self conditoon 
-    //|| ('#cell_'+eat).isClass('snake-cell')
+    //how to die 
   if (c<0 || r<0 || c>29 || r>19){
       console.log("Dead!");
       $('#message').html("You are dead!");
 
       lose.play();
-      // clearInterval(timerId); 
-
- 
       return;
     }  
     $('#cell_'+eat).addClass('snake-cell');  
@@ -157,8 +128,6 @@ function snakeMove() {
     // setTimeout(function(){snakeMove()}, speed);
   setTimeout(snakeMove, speed);
 }
-
-
 
 // Key press function
   $(document).keydown(function(e){
@@ -174,6 +143,5 @@ function snakeMove() {
       direction="down";
     } 
   });
-
 
 }); 
